@@ -23,7 +23,7 @@
 //     rating: { type: DataTypes.INTEGER, defaultValue: 0 },
 //     img: { type: DataTypes.STRING, allowNull: false }
 // });
-//
+
 //
 // const Type = sequelize.define('type', {
 //     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
@@ -105,9 +105,9 @@ const Role = sequelize.define('role', {
     name:{ type:  DataTypes.STRING, unique: true, allowNull: false }
 });
 
-const UserRole = sequelize.define('user_role',{
-    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-});
+// const UserRole = sequelize.define('user_role',{
+//     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+// });
 
 const Admin = sequelize.define('admin', {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
@@ -130,31 +130,56 @@ const Student = sequelize.define('student', {
     name:{ type:  DataTypes.STRING, unique: true, allowNull: false }
 });
 
-const Lead = sequelize.define('student', {
+const Lead = sequelize.define('lead', {
+    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    name:{ type:  DataTypes.STRING, unique: true, allowNull: false }
+});
+
+const Task = sequelize.define('task', {
+    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+    title: { type: DataTypes.STRING, allowNull: false },
+    description: { type: DataTypes.STRING, allowNull: false },
+    expirationDate: { type: DataTypes.DATEONLY, defaultValue: Date.now() }
+});
+
+const TaskCategory = sequelize.define('task_category', {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     name:{ type:  DataTypes.STRING, unique: true, allowNull: false }
 });
 
 
-
-
-//     name: { type: DataTypes.STRING, unique: true, allowNull: false },
-//     price: { type: DataTypes.INTEGER, allowNull: false },
-//     rating: { type: DataTypes.INTEGER, defaultValue: 0 },
-//     img: { type: DataTypes.STRING, allowNull: false }
-
-User.belongsToMany(Role, {through: UserRole });
-Role.belongsToMany(User, {through: UserRole});
+// User.belongsToMany(Role, {through: UserRole });
+// Role.belongsToMany(User, {through: UserRole});
 // User.hasMany(UserRole);
 // UserRole.belongsTo(User);
 // Role.hasMany(UserRole);
 // UserRole.belongsTo(Role);
 
-User.hasMany(Admin)
+User.hasMany(Admin);
+User.hasMany(Teacher);
+User.hasMany(Student);
 Admin.belongsTo(User);
+Teacher.belongsTo(User);
+Student.belongsTo(User);
+
 
 Role.hasMany(Admin);
+Role.hasMany(Teacher);
+Role.hasMany(Student);
 Admin.belongsTo(Role);
+Teacher.belongsTo(Role);
+Student.belongsTo(Role);
+
+User.hasMany(Task);
+Task.belongsTo(User);
+
+TaskCategory.hasMany(Task);
+Task.belongsTo(TaskCategory);
+
+Admin.hasMany(Lead);
+Lead.belongsTo(Admin);
+
+
 
 // Gender.hasMany(Admin);
 // Admin.belongsTo(Gender);
@@ -162,13 +187,13 @@ Admin.belongsTo(Role);
 // Gender.belongsTo(Admin);
 
 
-
 module.exports = {
     User,
     Role,
-    UserRole,
     Admin,
     Teacher,
     Student,
-    Lead
+    Lead,
+    Task,
+    TaskCategory
 };

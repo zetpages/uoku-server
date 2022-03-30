@@ -4,8 +4,8 @@ const ApiError = require('../error/ApiError');
 class adminController {
     async create(req, res, next) {
         try {
-            let { name, userId, roleId, genderId} = req.body;
-            const admin = await Admin.create({ name, userId, roleId, genderId});
+            let { name, userId, roleId} = req.body;
+            const admin = await Admin.create({ name, userId, roleId });
             return res.json(admin);
         } catch (e) {
             next(ApiError.badRequest(e.message));
@@ -14,7 +14,7 @@ class adminController {
 
 
     async getAll(req, res) {
-        let admin = await Admin.findAll({include: User});
+        let admin = await Admin.findAll({include: Role});
         return res.json(admin);
     }
 }
